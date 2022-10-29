@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
-//#include <ctype.h>
+#include <stdlib.h>
+#include <ctype.h>
 
 //function prototypes
 double addNumbers(double, double);
@@ -10,13 +11,13 @@ double divideNumbers(double, double);
 double modulusNumbers(int, int);
 int testForPrime(int);
 int factorial(int);
-//power (pwr()) and sqrt() are in <math.h> library
+
 
 int main(void) {
-	int iSelection = 0;
+	char  iSelection = '\0';
 	double foperand1 = 0, foperand2 = 0;
 	int ioperand1 = 0, ioperand2 = 0;
-	//char cClear = '\0';
+	char cClear = '\0';
 	
 	do {
 		printf("\n\nTHE CALCULATOR\n");
@@ -32,50 +33,49 @@ int main(void) {
 		printf("\n9\tSquare Root");
 		printf("\n0\tExit\n");
 		printf("\nPlease enter your selection: ");
-		scanf("%d", &iSelection);	
+		scanf(" %c", &iSelection);	
 		
 		//here we check for if input was a digit
-	/*	if (isdigit(iSelection) == 0) {
-		    printf("\nPlease select a valid numerical value.\n");
+		if (isdigit(iSelection) == 0) {
+		    printf("\nPlease enter a valid numerical value.\n");
 		    continue;
-		} */
-		//not sure why this doesn't work
-	
+		}
+
 		switch(iSelection) {
-			case 0:
+			case '0':
 				break;
 				
-			case 1:
+			case '1':
 				printf("\nEnter the two numbers to add seperated by a space: ");
-				scanf("%lf%lf", &foperand1, &foperand2);
+				scanf("%lf %lf", &foperand1, &foperand2);
 				printf("\n%.5lf + %.5lf = %.5lf\n", foperand1, foperand2, addNumbers(foperand1, foperand2));	
 				break;
 				
-			case 2:
+			case '2':
 				printf("\nEnter the two numbers to subtract seperated by a space: ");
-				scanf("%lf%lf", &foperand1, &foperand2);
+				scanf("%lf %lf", &foperand1, &foperand2);
 				printf("\n%.5lf - %.5lf = %.5lf\n", foperand1, foperand2, subtractNumbers(foperand1, foperand2));	
 				break;
 				
-			case 3:
+			case '3':
 				printf("\nEnter the two numbers to multiply seperated by a space: ");
-				scanf("%lf%lf", &foperand1, &foperand2);
+				scanf("%lf %lf", &foperand1, &foperand2);
 				printf("\n%.5lf * %.5lf = %.5lf\n", foperand1, foperand2, multiplyNumbers(foperand1, foperand2));
 				break;
 				
-			case 4:
+			case '4':
 				printf("\nEnter the two numbers to divide seperated by a space: ");
-				scanf("%lf%lf", &foperand1, &foperand2);
+				scanf("%lf %lf", &foperand1, &foperand2);
 				printf("\n%.5lf / %.5lf = %.5lf\n", foperand1, foperand2, divideNumbers(foperand1, foperand2));		
 				break;
 				
-			case 5:
+			case '5':
 				printf("\nEnter the two values to check the modulus of seperated by a space: ");
-				scanf("%d%d", &ioperand1, &ioperand2);
+				scanf("%d %d", &ioperand1, &ioperand2);
 				printf("\n%d %% %d = %lf\n", ioperand1, ioperand2, modulusNumbers(ioperand1, ioperand2));		
 				break;
 			
-			case 6:
+			case '6':
 				printf("\nEnter the value to check if prime (positive integer): ");
 				scanf("%d", &ioperand1);
 				if (testForPrime(ioperand1) != 0)
@@ -84,19 +84,19 @@ int main(void) {
 					printf("\nThis number is not prime.\n");
 				break;
 				
-			case 7:
+			case '7':
 				printf("\nEnter the value to do the factorial of: ");
 				scanf("%d", &ioperand1);
 				printf("\n%d! = %d\n", ioperand1, factorial(ioperand1));					
 				break;
 				
-			case 8:
+			case '8':
 				printf("\nEnter the value for the base, then the power value seperated by a space: ");
-				scanf("%lf%lf", &foperand1, &foperand2);
+				scanf("%lf %lf", &foperand1, &foperand2);
 				printf("\n%lf^%lf = %lf\n", foperand1, foperand2, pow(foperand1, foperand2));					
 				break;
 				
-			case 9:
+			case '9':
 				printf("\nEnter the value to do the square root of: ");
 				scanf("%lf", &foperand1);
 				printf("\nsqrt(%lf) = %lf\n", foperand1, sqrt(foperand1));					
@@ -106,18 +106,24 @@ int main(void) {
 				printf("\nPlease select a valid entry.\n");
 			
 		}
-		
-		//here we ask user if they want to clear the screen.
-		//this would be easier with some other type of loop.		
-	/*	printf("\nDo you want to clear the screen? (y or n): ");
-		scanf("%c", &cClear);
-		if (cClear == 'y')
-			system("cls");	*/
-			
-				
-	} while (iSelection != 0);
+		//here we ask the user if we want to print the screen
+		//fflush(stdin);						//standard input must be cleared
+		if (iSelection != '0') {
+			printf("\nDo you want to clear the screen? ('y' or 'n'): ");
+			scanf(" %c", &cClear);
+			//printf("%d", (int) cClear);	//these lines helped me to debug
+			//scanf("%d", iSelection);
+			//printf("%d", (int) system("cls"));
+			if (cClear == 'y' || cClear == 'Y')
+				system("cls");
+		}
+
+	} while (iSelection != '0');
+	system("cls");
+	printf("\nExiting Calculator.\n");
 	return 0;
 }
+
 //addNumbers function definiton
 double addNumbers(double operand1, double operand2) {
 	return operand1 + operand2;
@@ -149,6 +155,7 @@ int factorial(int operand1) {
 	for (int i = operand1; i > 0; i--)
 	    factorial *= i;
 	return factorial;
+}
 //another way to do factorial function below
 	/*    
 	do {
@@ -156,7 +163,6 @@ int factorial(int operand1) {
 	} while(operand1 > 0);
 	return factorial;
 	*/
-}
 
 //testForPrime function definition
 int testForPrime(int operand1) {
